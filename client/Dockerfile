@@ -1,5 +1,5 @@
 # Build environment
-FROM node:14.10 as build
+FROM node:14.10.1 as build
 WORKDIR /app
 COPY . .
 RUN npm ci --only=production

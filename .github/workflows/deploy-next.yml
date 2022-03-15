@@ -3,7 +3,7 @@ name: DEV
 on:
   push:
     branches:
-      - master
+      - next
 
 jobs:
   deploy:
@@ -12,7 +12,7 @@ jobs:
     
     - uses: actions/checkout@v2
       with:
-        ref: master
+        ref: next
 
     - name: Configure the API
       run: |

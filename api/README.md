@@ -1,11 +1,14 @@
 # API DEVELOPER DOCUMENTATION
 API usage documentation is coming soon! Below are instructions on how how to contribute and deploy this software.
 
-## Quickstart the API (local dev environment)
+## Quick start the API (local dev environment)
 **Start a PostGIS server**
 ```sh
-docker run -p 5432:5432 --name postgis -v postgres11:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password --restart always -d mdillon/postgis
+docker run -p 5432:5432 --name postgis -v postgres11:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password --restart always -d mdillon/postgis:11
 ```
+
+**Create a database**
+Create a database called `seacrifog`, and run the [SQL query to create the schema](src/db/sql/migration/schema.sql) manually in DBeaver/or some IDE
 
 **Setup the DB**
 The .backup file is from an older version of PostgreSQL and some PostgreSQL clients don't read it as a result. DBeaver - a decent, free DB IDE - has a PostgreSQL client that works by default (but any PostgreSQL client should work).

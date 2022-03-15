@@ -1,11 +1,18 @@
 # CLIENT DEVELOPER DOCUMENTATION
 
-## Quickstart the client (local dev environment)
+## Quick start the client (local dev environment)
 Once the API is setup, configure the client. This needs to be don in the context of the client package, meaning all the commands need to be run from the root of the client. Starting in the root of the seacrifog repository. The following commands should be executed to setup the environment:
 
 1. `cd client`
 2. `npm install`
 3. `npm start`
+
+Create a file .env, with the following contents:
+
+```txt
+GQL_ENDPOINT=http://localhost:3000/graphql
+DOWNLOADS_ENDPOINT=http://localhost:3000/downloads
+```
 
 **Some helpful Notes**
 
