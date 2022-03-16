@@ -64,7 +64,7 @@ export default [
   },
   {
     keyval: 'source-code',
-    href: 'https://github.com/SAEONData/seacrifog',
+    href: 'https://github.com/SAEON/seacrifog',
     avatar: { src: githubLogo, alt: 'GitHub Logo' },
     label: 'Source Code',
   },

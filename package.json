@@ -1,7 +1,7 @@
 {
   "name": "seacrifog",
   "version": "0.0.1",
-  "description": "Source code for the the SEACRIFOG component (Workpackage 5.4) deliverable by SAEON",
+  "description": "Source code for the the SEACRIFOG component (Work package 5.4) deliverable by SAEON",
   "scripts": {
     "install-all": "npm-run-all -s install-api install-client",
     "install-api": "npm --prefix api/ install",
@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git-as-saeon:SAEONData/seacrifog-deploy.git"
+    "url": "git@git-as-saeon:SAEON/seacrifog.git"
   },
   "keywords": [
-    "seacrfiog",
+    "seacrifog",
     "node.js",
     "react.js",
     "graphql"
