@@ -10,7 +10,7 @@ const formatDate = dt => {
 }
 
 export default {
-  'ICOS Metadata Results': {
+  'ICOS SEARCH': {
     exeKey: 'icos',
     offset: 0,
     logo: icosLogo,
@@ -29,14 +29,13 @@ export default {
     content: record => record,
     FormatContent: ({ content = null }) => <FormatIcosRecord content={content} />,
   },
-  'SAEON CKAN: saeon-odp-4-2': {
+  'SAEON ODP': {
     exeKey: 'saeon',
-    offset: 1,
+    offset: 0,
     logo: saeonLogo,
-    title: record => record?.metadata_json?.titles?.[0]?.title || 'NA',
-    explorerUri: record =>
-      `http://www.sasdi.net/metaview.aspx?uuid=${record?.metadata_json?.alternateIdentifiers?.[0]?.alternateIdentifier}`,
-    content: record => record?.metadata_json || null,
+    title: record => record?.titles?.[0]?.title || 'NA',
+    explorerUri: ({ doi, id }) => `https://catalogue.saeon.ac.za/records/${doi || id}`,
+    content: record => record,
     FormatContent: ({ content = null }) => <FormatSaeonRecord content={content} />,
   },
 }

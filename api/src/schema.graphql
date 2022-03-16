@@ -168,7 +168,7 @@ type IntegrationResult {
 }
 
 type Metadata {
-  i: Int
+  id: ID!
   target: String
   result: JSON
   error: String

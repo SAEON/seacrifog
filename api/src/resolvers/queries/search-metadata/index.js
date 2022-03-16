@@ -14,8 +14,8 @@ const executors = readdirSync(__dirname + '/executors').filter(dir => activeExec
  * Target name maps
  */
 const targets = {
-  saeon: 'SAEON CKAN: saeon-odp-4-2',
-  icos: 'ICOS Metadata Results',
+  saeon: 'SAEON ODP',
+  icos: 'ICOS SEARCH',
 }
 
 /**
@@ -44,7 +44,7 @@ export default async (self, args, req) => {
 
   /**
    * Create an object that encapsulates the search logic
-   * Exexutors will use this object to define search logic
+   * Executors will use this object to define search logic
    * against their respective endpoints
    */
   const search = {}
@@ -127,13 +127,7 @@ export default async (self, args, req) => {
 
   search.exeConfigs = exeConfigs
 
-  log(
-    '\n\nSearching metadata:',
-    `${activeExecutors.length} endpoints registererd for ${JSON.stringify(activeExecutors)}`,
-    '\n',
-    JSON.stringify(search, null, 2),
-    '\n\n'
-  )
+  console.log('search', search)
 
   const searchResults = await Promise.allSettled(
     executors.map(dir =>
@@ -141,13 +135,29 @@ export default async (self, args, req) => {
     )
   )
 
-  return executors.map((executor, i) => ({
-    i,
-    target: targets[executor] || executor,
-    result:
+  const allResults = executors.map((executor, i) => {
+    const { error, ...result } =
       searchResults[i]?.status === 'fulfilled'
         ? searchResults[i].value
-        : { success: false, result_length: 0, results: [] },
-    error: searchResults[i]?.status === 'rejected' ? searchResults[i]?.reason : undefined,
-  }))
+        : {
+            error:
+              'Search execution failed. This is not an error from the search API, this is an error trying to use the search API',
+            success: false,
+            result_length: 0,
+            results: [],
+          }
+
+    if (error) {
+      console.error(error)
+    }
+
+    return {
+      i,
+      target: targets[executor] || executor,
+      result,
+      error,
+    }
+  })
+
+  return allResults
 }

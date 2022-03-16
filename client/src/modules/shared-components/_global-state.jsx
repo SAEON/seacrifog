@@ -54,7 +54,7 @@ export const GlobalState = ({ children }) => {
           byProtocols: $byProtocols
           exeConfigs: $exeConfigs
         ) {
-          i
+          id
           target
           result
           error
@@ -62,7 +62,7 @@ export const GlobalState = ({ children }) => {
       }
     `,
     {
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: {
         bySites: state.selectedSites,
         byNetworks: state.selectedNetworks,
@@ -72,6 +72,11 @@ export const GlobalState = ({ children }) => {
       },
     }
   )
+
+  if (error) {
+    alert('Unexpected search error occurred. Please look at the console for more information')
+    console.error(error)
+  }
 
   const updateGlobalState = (obj, { currentIndex = null, selectedIds = null } = {}) => {
     let o = {}
@@ -90,15 +95,7 @@ export const GlobalState = ({ children }) => {
         ...state,
         loadingSearchResults: loading,
         searchResults: data?.searchMetadata.filter(({ error }) => !error),
-        searchErrors: error
-          ? [
-              {
-                target: 'NA',
-                error: JSON.stringify(error),
-                result: { success: false, result_length: 0, results: [] },
-              },
-            ]
-          : data?.searchMetadata.map(({ error }) => error).filter(_ => _),
+        searchErrors: data?.searchMetadata.map(({ error }) => error).filter(_ => _),
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import { Loading, ErrorMsg } from '../shared-components'
 export default ({
   query,
   variables,
-  fetchPolicy = 'network-only',
+  fetchPolicy = 'no-cache',
   children,
   loadingComponent = null,
 }) => {

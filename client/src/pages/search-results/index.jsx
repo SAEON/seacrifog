@@ -12,14 +12,14 @@ import RecordViewer from './metadata-record-view'
 import { Link } from 'react-router-dom'
 import Footer from '../../modules/layout/footer'
 
-const scrolltoRecord = (index, ref) => ref?.current?.scrollToItem(index)
+const scrollToRecord = (index, ref) => ref?.current?.scrollToItem(index)
 
 const mainMenuIconStyle = (disabled, toggled) => ({
   color: disabled ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,1)',
   backgroundColor: toggled ? 'rgba(255,255,255,0.3)' : '',
 })
 
-const getProgresStyle = loading => ({
+const getProgressStyle = loading => ({
   margin: 0,
   visibility: loading ? 'inherit' : 'hidden',
   position: 'absolute',
@@ -59,21 +59,21 @@ class View extends PureComponent {
         {/* Toolbar */}
         <LinearProgress
           id={'search-loading-progress-indicator'}
-          style={getProgresStyle(loadingSearchResults)}
+          style={getProgressStyle(loadingSearchResults)}
         />
         <div id="search-results-header">
           <Toolbar
             colored
             className={'sf-content-header'}
             title={
-              searchResults.reduce((sum, { result }) => sum + (result?.results?.length || 0), 0) +
+              searchResults?.reduce((sum, { result }) => sum + (result?.results?.length || 0), 0) +
               ' search results'
             }
             actions={[
               <Button
                 key={0}
                 tooltipLabel="To top"
-                onClick={() => scrolltoRecord(0, searchRefs[currentIndex])}
+                onClick={() => scrollToRecord(0, searchRefs[currentIndex])}
                 icon
               >
                 arrow_upward
@@ -82,7 +82,7 @@ class View extends PureComponent {
                 key={1}
                 tooltipLabel="To bottom"
                 onClick={() =>
-                  scrolltoRecord(
+                  scrollToRecord(
                     searchResults?.map(({ result }) => result?.results?.length || 0)[currentIndex] -
                       1,
                     searchRefs[currentIndex]
@@ -152,7 +152,7 @@ class View extends PureComponent {
                           return (
                             <InfiniteLoader
                               isItemLoaded={currentIndex => {
-                                // If there are less results than a single pagniation, then everything is loaded
+                                // If there are less results than a single pagination, then everything is loaded
                                 if (results.length < 100) return true
                                 // If the current item index is smaller than the result set, then current item is loaded
                                 if (currentIndex < results.length) {

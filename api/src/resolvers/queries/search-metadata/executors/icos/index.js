@@ -29,10 +29,9 @@ export default async search => {
         }, false)
 
   let data
-  console.log('ICOS SEARCH?', doSearch)
+  let error = null
   if (doSearch) {
     const searchQuery = sparqlQuery({ themeIris, sites, limit, offset })
-    console.log('QUERY:', searchQuery, '\n')
 
     const response = await axios({
       baseURL: 'https://meta.icos-cp.eu/sparql',
@@ -43,11 +42,11 @@ export default async search => {
         'Accept-Encoding': 'gzip, deflate, br',
       },
       data: searchQuery,
-    }).catch(error => {
-      throw new Error('ICOS search error. ' + error.message)
+    }).catch(e => {
+      error = `Error searching ICOS RDF data: ${e.message}`
     })
 
-    data = response.data
+    data = response?.data
   }
 
   data = data || {
@@ -57,7 +56,8 @@ export default async search => {
   }
 
   return {
-    success: true,
+    success: !error,
+    error,
     result_length: data?.results?.bindings?.length || 0,
     results: data?.results?.bindings || [],
   }

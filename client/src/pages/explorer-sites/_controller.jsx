@@ -104,11 +104,12 @@ class AtlasController extends PureComponent {
           loadingSearchResults,
           searchErrors,
         }) => {
-          const searchResultLength = searchErrors.length
-            ? 0
-            : searchResults
-                .map(r => r?.result?.result_length || 0)
-                .reduce((sum, val) => sum + val, 0)
+          const searchResultLength =
+            searchErrors?.length || 0
+              ? 0
+              : searchResults
+                  ?.map(r => r?.result?.result_length || 0)
+                  .reduce((sum, val) => sum + val, 0)
 
           return (
             <OlReact
@@ -281,21 +282,21 @@ class AtlasController extends PureComponent {
                     {/* Search results error button */}
                     <div style={{ ...badgeContainer, bottom: 0 }}>
                       <Badge
-                        style={searchErrors.length > 0 ? {} : { display: 'none' }}
+                        style={searchErrors?.length > 0 ? {} : { display: 'none' }}
                         key={89}
-                        badgeStyle={badgeStyle(searchErrors.length > 0 ? false : true)}
-                        badgeContent={searchErrors.length}
+                        badgeStyle={badgeStyle(searchErrors?.length > 0 ? false : true)}
+                        badgeContent={searchErrors?.length || -1}
                         badgeId={'search-results-errors'}
                       >
                         <Button
-                          style={mainMenuIconStyle(searchErrors.length ? false : true)}
-                          disabled={searchErrors.length ? false : true}
-                          tooltipLabel={`${searchErrors.length} error${
-                            searchErrors.length === 1 ? '' : 's'
-                          } occured searching metadata`}
+                          style={mainMenuIconStyle(searchErrors?.length ? false : true)}
+                          disabled={searchErrors?.length ? false : true}
+                          tooltipLabel={`${searchErrors?.length} error${
+                            searchErrors?.length === 1 ? '' : 's'
+                          } occurred searching metadata`}
                           onClick={() =>
                             alert(
-                              'Please alert SEACRIFOG administrators that search errors are occuring'
+                              'Please alert SEACRIFOG administrators that search errors are occurring'
                             )
                           }
                           icon
@@ -308,19 +309,21 @@ class AtlasController extends PureComponent {
                     {/* Search results button */}
                     <div style={{ ...badgeContainer, bottom: 0 }}>
                       <Badge
-                        style={searchErrors.length < 1 ? {} : { display: 'none' }}
+                        style={searchErrors?.length < 1 ? {} : { display: 'none' }}
                         key={91}
                         badgeStyle={badgeStyle(searchResultLength > 0 ? false : true)}
-                        badgeContent={searchResults
-                          .map(r => r?.result?.result_length || 0)
-                          .reduce((sum, val) => sum + val, 0)}
+                        badgeContent={
+                          searchResults
+                            ?.map(r => r?.result?.result_length || 0)
+                            .reduce((sum, val) => sum + val, 0) || -1
+                        }
                         badgeId={'search-results-notification'}
                       >
                         <Button
                           tooltipLabel={`Organizations searched: ${
                             searchResults?.length
                           }. Records found: ${searchResults
-                            .map(r => r.result.result_length)
+                            ?.map(r => r.result.result_length)
                             .reduce((sum, val) => sum + val, 0)}`}
                           tooltipPosition="left"
                           disabled={searchResultLength > 0 ? false : true}

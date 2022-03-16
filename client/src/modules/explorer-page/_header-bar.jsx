@@ -8,7 +8,7 @@ import { SideMenuFilter, GlobalStateContext, ShowChartsState } from '../shared-c
 import { SideMenu } from '../shared-components/index'
 import { DOWNLOADS_ENDPOINT } from '../../config'
 
-const getProgresStyle = loading => ({
+const getProgressStyle = loading => ({
   margin: 0,
   visibility: loading ? 'inherit' : 'hidden',
   position: 'absolute',
@@ -69,7 +69,7 @@ export default ({ resetFn, selectedIds, ...props }) => {
                     <>
                       <LinearProgress
                         id={'entity-save-progress-indicator'}
-                        style={getProgresStyle(loadingSearchResults)}
+                        style={getProgressStyle(loadingSearchResults)}
                       />
                       <Toolbar title={'Loading...'} colored className={'sf-content-header'} />
                     </>
@@ -81,7 +81,7 @@ export default ({ resetFn, selectedIds, ...props }) => {
                     <>
                       <LinearProgress
                         id={'search-loading-progress-indicator'}
-                        style={getProgresStyle(loadingSearchResults)}
+                        style={getProgressStyle(loadingSearchResults)}
                       />
                       <div id="search-results-header">
                         <Toolbar
@@ -92,17 +92,17 @@ export default ({ resetFn, selectedIds, ...props }) => {
                             <Badge
                               key={0}
                               badgeStyle={badgeStyle(
-                                searchErrors.length > 0 && !loadingSearchResults ? false : true
+                                searchErrors?.length > 0 && !loadingSearchResults ? false : true
                               )}
-                              badgeContent={searchErrors.length}
+                              badgeContent={searchErrors?.length || -1}
                               badgeId={'search-results-errors'}
                             >
                               <Button
                                 style={mainMenuIconStyle(
-                                  searchErrors.length && !loadingSearchResults ? false : true
+                                  searchErrors?.length && !loadingSearchResults ? false : true
                                 )}
                                 disabled={
-                                  searchErrors.length && !loadingSearchResults ? false : true
+                                  searchErrors?.length && !loadingSearchResults ? false : true
                                 }
                                 tooltipLabel={'Errors occurred. Click for more details'}
                                 onClick={() => setErrorDialogueOpen(true)}
@@ -117,9 +117,11 @@ export default ({ resetFn, selectedIds, ...props }) => {
                               badgeStyle={badgeStyle(
                                 searchResultLength > 0 && !loadingSearchResults ? false : true
                               )}
-                              badgeContent={searchResults
-                                ?.map(r => r?.result?.result_length || 0)
-                                .reduce((sum, val) => sum + val, 0)}
+                              badgeContent={
+                                searchResults
+                                  ?.map(r => r?.result?.result_length || 0)
+                                  .reduce((sum, val) => sum + val, 0) || -1
+                              }
                               badgeId={'search-results-notification'}
                             >
                               <Button

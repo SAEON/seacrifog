@@ -1,1 +1,3 @@
-export default {}
+export default {
+  id: async ({ i }) => i,
+}
