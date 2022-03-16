@@ -1,0 +1,63 @@
+version: '3.8'
+
+networks:
+  seacrifog:
+    name: seacrifog
+    driver: overlay
+    attachable: true
+
+services:
+  postgres:
+    image: postgis/postgis:14-3.2
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    ports:
+      - 6020:5432
+    networks:
+      - seacrifog
+
+  api:
+    image: $API_IMAGE
+    environment:
+      POSTGRES_HOST: postgres
+      ALLOWED_ORIGINS: https://seacrifog.saeon.ac.za,https://api.seacrifog.saeon.ac.za
+      FORCE_DB_RESET: true
+      INITIAL_CRON_WAIT: 600000
+      ICOS_INTEGRATION_SCHEDULE: 0 1 * * *
+    deploy:
+      placement:
+        max_replicas_per_node: 2
+      replicas: 1
+      rollback_config:
+        parallelism: 0
+      update_config:
+        parallelism: 0
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: any
+        delay: 30s
+    ports:
+      - 7004:3000
+    networks:
+      - seacrifog
+
+  client:
+    image: $CLIENT_IMAGE
+    deploy:
+      placement:
+        max_replicas_per_node: 2
+      replicas: 1
+      rollback_config:
+        parallelism: 0
+      update_config:
+        parallelism: 0
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: any
+        delay: 30s
+    ports:
+      - 7005:80
+    networks:
+      - seacrifog
