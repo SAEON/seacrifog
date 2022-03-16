@@ -8,8 +8,6 @@ const POSTGRES_USER = process.env.POSTGRES_USER || 'postgres'
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD || 'password'
 const POSTGRES_PORT = parseInt(process.env.POSTGRES_PORT, 10) || 5432
 
-console.log('POSTGRES', POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD)
-
 export default () =>
   new Pool({
     host: POSTGRES_HOST,
