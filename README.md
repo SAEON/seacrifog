@@ -207,7 +207,7 @@ API usage documentation is coming soon! Below are instructions on how how to con
 ## Quick start the API (local dev environment)
 **Start a PostGIS server**
 ```sh
-docker run -p 5432:5432 --name postgis -v postgres11:/var/lib/postgresql/data -e POSTGRES_PASSWORD=password --restart always -d mdillon/postgis:11
+docker run -p 5432:5432 --name postgis -e POSTGRES_PASSWORD=password --restart always -d postgis/postgis:14-3.2
 ```
 
 **Create a database**
