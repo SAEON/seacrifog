@@ -21,7 +21,7 @@ services:
     environment:
       POSTGRES_HOST: postgres
       ALLOWED_ORIGINS: https://seacrifog.saeon.ac.za,https://api.seacrifog.saeon.ac.za
-      FORCE_DB_RESET: true
+      FORCE_DB_RESET: 'true'
       INITIAL_CRON_WAIT: 600000
       ICOS_INTEGRATION_SCHEDULE: 0 1 * * *
     deploy:
