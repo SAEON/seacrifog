@@ -127,8 +127,6 @@ export default async (self, args, req) => {
 
   search.exeConfigs = exeConfigs
 
-  console.log('search', search)
-
   const searchResults = await Promise.allSettled(
     executors.map(dir =>
       import(`${__dirname}/executors/${dir}/index.js`).then(({ default: fn }) => fn(search))

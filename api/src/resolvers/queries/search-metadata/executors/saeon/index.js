@@ -53,8 +53,6 @@ export default async search => {
     limit: 100,
   }
 
-  console.log('TITLES', titles)
-
   const response = await axios({
     url: ES_ADDRESS,
     method: 'POST',
