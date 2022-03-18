@@ -1,7 +1,7 @@
 import React from 'react'
 import DataQuery from '../../modules/data-query'
 import { SITES_MIN } from '../../graphql/queries'
-import { OlReact } from '@saeon/ol-react'
+import { OlReact } from '../../modules/ol-react'
 import { terrestrisBaseMap, geoJsonLayer } from '../../modules/atlas/layers'
 import { dotStyle1 } from '../../modules/atlas/styles'
 import getSitesExtent from '../../lib/get-sites-extent'
