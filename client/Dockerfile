@@ -1,7 +1,15 @@
 # Build environment
 FROM node:14.10.1 as build
+
+ARG GQL_ENDPOINT
+ARG DOWNLOADS_ENDPOINT
+
 WORKDIR /app
 COPY . .
+
+RUN echo "GQL_ENDPOINT=$GQL_ENDPOINT" > .env
+RUN echo "DOWNLOADS_ENDPOINT=$DOWNLOADS_ENDPOINT" >> .env
+
 RUN npm ci --only=production
 RUN npm run dist
 

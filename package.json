@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Source code for the the SEACRIFOG component (Work package 5.4) deliverable by SAEON",
   "scripts": {
+    "clean-installed-files": "find . -name node_modules -type d -exec rm -rv {} + && find . -name package-lock.json -type f -delete",
     "install-all": "npm-run-all -s install-api install-client",
     "install-api": "npm --prefix api/ install",
     "install-client": "npm --prefix client/ install",

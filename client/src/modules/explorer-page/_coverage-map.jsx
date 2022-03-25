@@ -1,5 +1,5 @@
 import React from 'react'
-import { OlReact } from '@saeon/ol-react'
+import { OlReact } from '../ol-react'
 import { polygonStyle } from '../atlas/styles'
 import { geoJsonLayer, terrestrisBaseMap } from '../atlas/layers'
 
