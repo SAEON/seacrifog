@@ -24,9 +24,10 @@ if (!process.env.NODE_ENV || !['production', 'development'].includes(process.env
 
 // Setup DB
 if (process.env.FORCE_DB_RESET === 'true') {
-  setupDbData().then(() => setupDbSchema())
+  setupDbSchema().then(() => setupDbData())
 } else {
-  setupDbSchema()
+  console.info('Only resetting DB data')
+  setupDbData()
 }
 
 // Load GraphQL schema

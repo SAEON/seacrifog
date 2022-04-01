@@ -86,11 +86,13 @@ export const setupDbSchema = () =>
         log('seacrifog database dropped and re-created!')
         log('seacrifog schema re-created!')
       } catch (error) {
-        logError('Unable to drop/create DB. Try running src/migration/schema.sql, and sql/migration/etl.sql manually')
+        logError(
+          'Unable to drop/create DB. Try running src/migration/schema.sql, and sql/migration/etl.sql manually'
+        )
       } finally {
         await configDbPool.end()
       }
-      
+
       log("\nDev DB schema complete. If you don't see this message there was a problem")
     })()
   ).catch(err => {
@@ -98,7 +100,7 @@ export const setupDbSchema = () =>
     process.exit(1)
   })
 
-  export const setupDbData = () =>
+export const setupDbData = () =>
   Promise.resolve(
     (async () => {
       log(
@@ -107,7 +109,7 @@ export const setupDbSchema = () =>
         "Dropping and recreating data. If you see this as a log on the production server YOU'RE IN TROUBLE!!!!!!\n",
         '============================================================================================================\n\n'
       )
-   
+
       // Update the database from the CSVs
       const cleanUp = []
       const DIRECTORIES = [
