@@ -69,21 +69,21 @@ export default () =>
         try {
           await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB))
         } catch {
-          log('Unable to stop DB. Will still try to drop / recreate it')
+          logError('Unable to stop DB. Will still try to drop / recreate it')
         }
         await configDbPool.query(loadSqlFile('migration/db-setup/drop-db.sql', DB))
         await configDbPool.query(loadSqlFile('migration/db-setup/create-db.sql', DB))
+
+        await query({ text: loadSqlFile('migration/schema.sql') })
+        await query({ text: loadSqlFile('migration/etl.sql') })
+
         log('seacrifog database dropped and re-created!')
+        log('seacrifog schema re-created!')
       } catch (error) {
-        log('Unable to drop/create DB')
+        logError('Unable to drop/create DB. Try running src/migration/schema.sql, and sql/migration/etl.sql manually')
       } finally {
         await configDbPool.end()
       }
-
-      // Create the seacrifog schema, and populate database
-      await query({ text: loadSqlFile('migration/schema.sql') })
-      await query({ text: loadSqlFile('migration/etl.sql') })
-      log('seacrifog schema re-created!')
 
       // Update the database from the CSVs
       const cleanUp = []
