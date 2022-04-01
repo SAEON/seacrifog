@@ -64,11 +64,21 @@ export default () =>
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
       })
-      await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB))
-      await configDbPool.query(loadSqlFile('migration/db-setup/drop-db.sql', DB))
-      await configDbPool.query(loadSqlFile('migration/db-setup/create-db.sql', DB))
-      await configDbPool.end()
-      log('seacrifog database dropped and re-created!')
+
+      try {
+        try {
+          await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB)) 
+        } catch  {
+          log("Unable to stop DB. Will still try to drop / recreate it")
+        }
+        await configDbPool.query(loadSqlFile('migration/db-setup/drop-db.sql', DB))
+        await configDbPool.query(loadSqlFile('migration/db-setup/create-db.sql', DB))
+        log('seacrifog database dropped and re-created!')
+      } catch (error) {
+        console.error("Unable to drop/create DB")
+      } finally {
+        await configDbPool.end()
+      }
 
       // Create the seacrifog schema, and populate database
       await query({ text: loadSqlFile('migration/schema.sql') })

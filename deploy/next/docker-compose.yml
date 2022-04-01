@@ -19,8 +19,6 @@ services:
       INITIAL_CRON_WAIT: 600000
       ICOS_INTEGRATION_SCHEDULE: 0 1 * * *
     deploy:
-      placement:
-        max_replicas_per_node: 2
       replicas: 1
       rollback_config:
         parallelism: 0
@@ -39,8 +37,6 @@ services:
   client:
     image: $CLIENT_IMAGE
     deploy:
-      placement:
-        max_replicas_per_node: 2
       replicas: 1
       rollback_config:
         parallelism: 0
