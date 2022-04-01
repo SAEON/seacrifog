@@ -44,7 +44,7 @@ const loadSqlFile = (filepath, ...args) => {
   return sql
 }
 
-export default () =>
+export const setupDbSchema = () =>
   Promise.resolve(
     (async () => {
       log(
@@ -90,7 +90,24 @@ export default () =>
       } finally {
         await configDbPool.end()
       }
+      
+      log("\nDev DB schema complete. If you don't see this message there was a problem")
+    })()
+  ).catch(err => {
+    logError('Error initializing DEV database', err)
+    process.exit(1)
+  })
 
+  export const setupDbData = () =>
+  Promise.resolve(
+    (async () => {
+      log(
+        '\n\n',
+        '============================================ WARNING!!!!! ==================================================\n',
+        "Dropping and recreating data. If you see this as a log on the production server YOU'RE IN TROUBLE!!!!!!\n",
+        '============================================================================================================\n\n'
+      )
+   
       // Update the database from the CSVs
       const cleanUp = []
       const DIRECTORIES = [

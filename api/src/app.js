@@ -9,7 +9,7 @@ import { readFileSync } from 'fs'
 import { normalize, join } from 'path'
 import resolvers from './resolvers'
 import { log, logError } from './lib/log'
-import { initializeLoaders, query, setupDb } from './db'
+import { initializeLoaders, query, setupDbData, setupDbSchema } from './db'
 import cron from './cron'
 import { config } from 'dotenv'
 import nativeExtensions from './lib/native-extensions'
@@ -24,7 +24,9 @@ if (!process.env.NODE_ENV || !['production', 'development'].includes(process.env
 
 // Setup DB
 if (process.env.FORCE_DB_RESET === 'true') {
-  setupDb()
+  setupDbData().then(() => setupDbSchema())
+} else {
+  setupDbSchema()
 }
 
 // Load GraphQL schema
