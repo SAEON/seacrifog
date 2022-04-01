@@ -109,8 +109,10 @@ jobs:
           password: ${{ secrets.DEPLOYMENT_HOST_PASSWORD }}
           port: ${{ secrets.DEPLOYMENT_HOST_SSH_PORT }}
           script: |
-            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" > /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" > /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGIS_PASSWORD=${{ secrets.POSTGIS_PASSWORD }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             echo "API_IMAGE=${{ needs.build-api.outputs.image }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             echo "CLIENT_IMAGE=${{ needs.build-client.outputs.image }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
-            echo "POSTGIS_PASSWORD=${{ secrets.POSTGIS_PASSWORD }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             sudo /opt/deploy-docker-stack.sh /home/runner/seacrifog/deploy/next/docker-compose.yml /home/runner/seacrifog/deploy/next/docker-compose.env seacrifog

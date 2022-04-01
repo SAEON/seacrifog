@@ -6,27 +6,13 @@ networks:
     driver: overlay
     attachable: true
 
-volumes:
-  postgis:
-    driver: local
-
 services:
-  postgres:
-    image: postgis/postgis:14-3.2
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    ports:
-      - 6020:5432
-    volumes:
-      - postgis:/var/lib/postgresql/data/pgdata
-    networks:
-      - seacrifog
-
   api:
     image: $API_IMAGE
     environment:
-      POSTGRES_HOST: postgres
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_PORT: $POSTGRES_PORT
+      POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
       ALLOWED_ORIGINS: https://seacrifog.saeon.ac.za,https://api.seacrifog.saeon.ac.za
       FORCE_DB_RESET: 'true'
