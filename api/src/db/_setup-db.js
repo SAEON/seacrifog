@@ -67,15 +67,15 @@ export default () =>
 
       try {
         try {
-          await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB)) 
-        } catch  {
-          log("Unable to stop DB. Will still try to drop / recreate it")
+          await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB))
+        } catch {
+          log('Unable to stop DB. Will still try to drop / recreate it')
         }
         await configDbPool.query(loadSqlFile('migration/db-setup/drop-db.sql', DB))
         await configDbPool.query(loadSqlFile('migration/db-setup/create-db.sql', DB))
         log('seacrifog database dropped and re-created!')
       } catch (error) {
-        console.error("Unable to drop/create DB")
+        log('Unable to drop/create DB')
       } finally {
         await configDbPool.end()
       }
