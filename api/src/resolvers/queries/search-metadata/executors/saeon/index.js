@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const ES_ADDRESS = 'https://proxy.saeon.ac.za/elasticsearch/saeon-odp-catalogue-search/_search'
+const ES_ADDRESS = 'https://proxy.saeon.ac.za/elasticsearch/7.14/saeon-odp-catalogue-search/_search'
 
 /**
  * TODO
