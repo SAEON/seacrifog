@@ -66,28 +66,14 @@ export const setupDbSchema = () =>
       })
 
       try {
-        try {
-          await configDbPool.query(loadSqlFile('migration/db-setup/stop-db.sql', DB))
-        } catch {
-          logError('Unable to stop DB. Will still try to drop / recreate it')
-        }
-        await configDbPool.query(loadSqlFile('migration/db-setup/drop-db.sql', DB))
-        log('Dropped DB')
-
-        await configDbPool.query(loadSqlFile('migration/db-setup/create-db.sql', DB))
-        log('Created DB')
-
-        await query({ text: loadSqlFile('migration/schema.sql') })
+        await query({ text: loadSqlFile('schema.sql') })
         log('Created schema')
-
-        await query({ text: loadSqlFile('migration/etl.sql') })
-        log('Loaded data from prototype DB')
 
         log('seacrifog database dropped and re-created!')
         log('seacrifog schema re-created!')
       } catch (error) {
         logError(
-          'Unable to drop/create DB. Try running src/migration/schema.sql, and sql/migration/etl.sql manually'
+          'Unable to drop/create DB. Try running src/migration/schema.sql, and sql/etl.sql manually'
         )
       } finally {
         await configDbPool.end()

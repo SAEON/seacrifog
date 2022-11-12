@@ -236,7 +236,7 @@ npm install
 ```
 
 #### Configure the API to re-create the database on startup
-This is false by default (for obvious reasons!)
+This is false by default
 ```sh
 echo FORCE_DB_RESET=true > .env
 ```
