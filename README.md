@@ -217,11 +217,11 @@ Create a database called `seacrifog`, and run the [SQL query to create the schem
 The .backup file is from an older version of PostgreSQL and some PostgreSQL clients don't read it as a result. DBeaver - a decent, free DB IDE - has a PostgreSQL client that works by default (but any PostgreSQL client should work).
 
 1. Log into a running PostGIS server
-2. Create a DB called `seacrifog_old`
-3. Restore ([seacrifog-prototype.backup](api/src/db)) to this database. It's located in this repository at `api/src/db/`
-4. Make sure that `FORCE_DB_RESET` is set to `true` (See below)
+2. Create a DB called `seacrifog` with appropriate permissions
+3. Run the `api/src/db/sql/schema.sql` file to create the schema (this will be an empty DB with the correct tables)
+2. Restore `api/src/db/seacrifog.backup` to get the prototype data
 
-Once the `seacrifog_old` backup is restored, on application startup a new database will be initialized (`seacrifog`). The old data will be migrated to a new schema and the CSVs located in `api/src/db/csvs` will be imported as well. These are dummy data that are the result of work outputs prior to Work Package 5.4.
+The old data will be migrated to a new schema and the CSVs located in `api/src/db/csvs` will be imported as well. These are dummy data that are the result of work outputs prior to Work Package 5.4.
 
 #### Work in the context of the API package
 All the commands need to be run from the root of the API. Starting in the root of the seacrifog repository:
