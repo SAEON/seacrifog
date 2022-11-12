@@ -1,5 +1,5 @@
 # Build environment
-FROM node:14.10.1 as build
+FROM node:14.21.1 as build
 
 ARG GQL_ENDPOINT
 ARG DOWNLOADS_ENDPOINT
