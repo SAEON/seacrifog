@@ -219,9 +219,7 @@ The .backup file is from an older version of PostgreSQL and some PostgreSQL clie
 1. Log into a running PostGIS server
 2. Create a DB called `seacrifog_old`
 3. Restore ([seacrifog-prototype.backup](api/src/db)) to this database. It's located in this repository at `api/src/db/`
-4. Make sure that `FORCE_DB_RESET` is set to `true` (See below)
-
-**NOTE**: _This only runs automatically for local development. When deploying to a server, adjust the credentials of the dblink connection and run the script manually_
+4. Make sure that `FORCE_DB_RESET` is set to `true` (See below - _This only runs automatically for local development. When deploying to a server, adjust the credentials of the dblink connection and run the script manually_)
 
 Once the `seacrifog_old` backup is restored, on application startup a new database will be initialized (`seacrifog`). The old data will be migrated to a new schema and the CSVs located in `api/src/db/csvs` will be imported as well. These are dummy data that are the result of work outputs prior to Work Package 5.4.
 

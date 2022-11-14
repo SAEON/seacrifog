@@ -67,16 +67,10 @@ export const setupDbSchema = () =>
 
       try {
         await query({ text: loadSqlFile('migration/schema.sql') })
-        log('Created schema')
-
-        await query({ text: loadSqlFile('migration/etl.sql') })
-        log('Loaded data from prototype DB')
-
-        log('seacrifog database dropped and re-created!')
         log('seacrifog schema re-created!')
       } catch (error) {
         logError(
-          'Unable to drop/create DB. Try running src/migration/schema.sql, and sql/migration/etl.sql manually'
+          'Unable to drop and recreate DB schema. Try running src/migration/schema.sql, and sql/migration/etl.sql manually'
         )
       } finally {
         await configDbPool.end()
@@ -95,9 +89,19 @@ export const setupDbData = () =>
       log(
         '\n\n',
         '============================================ WARNING!!!!! ==================================================\n',
-        "Dropping and recreating data. If you see this as a log on the production server YOU'RE IN TROUBLE!!!!!!\n",
+        "Re-seeding data. If you see this as a log on the production server YOU'RE IN TROUBLE!!!!!!\n",
         '============================================================================================================\n\n'
       )
+
+      await query({ text: loadSqlFile('migration/etl.sql') })
+        .then(() => {
+          log('Loaded data from prototype DB')
+        })
+        .catch(() => {
+          log(
+            '== ERROR ==Unable to load data via the dblink connection. Run this manually if required'
+          )
+        })
 
       // Update the database from the CSVs
       const cleanUp = []
