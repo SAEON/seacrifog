@@ -1,4 +1,4 @@
-name: deploy@next
+name: Deploy seacrifog.saeon.ac.za
 
 on:
   workflow_dispatch:
@@ -7,6 +7,15 @@ on:
       - next
 
 env:
+  SWARM_HOSTNAME: ${{ secrets.SWARM_HOSTNAME }} # Organization secret
+  SWARM_USERNAME: ${{ secrets.SWARM_USERNAME }} # Organization secret
+  SWARM_PASSWORD: ${{ secrets.SWARM_PASSWORD }} # Organization secret
+  SWARM_SSH_PORT: ${{ secrets.SWARM_SSH_PORT }} # Organization secret
+  POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }} # Repository secret
+  POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }} # Repository secret
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }} # Repository secret
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} # Repository secret
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   REGISTRY: ghcr.io
   API_IMAGE_NAME: saeon/seacrifog-api
   CLIENT_IMAGE_NAME: saeon/seacrifog-client
@@ -19,27 +28,27 @@ jobs:
       image: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Check out source code (shared)
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           ref: ${{ env.BRANCH_REF }}
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@master
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ env.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@master
         with:
           images: ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}
           tags: |
             type=sha
 
       - name: Build and push API
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@master
         with:
           context: api
           push: true
@@ -52,28 +61,27 @@ jobs:
       image: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Check out source code (shared)
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           ref: ${{ env.BRANCH_REF }}
 
       - name: Log in to the Container registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
+        uses: docker/login-action@master
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ env.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@master
         with:
           images: ${{ env.REGISTRY }}/${{ env.CLIENT_IMAGE_NAME }}
           tags: |
             type=sha
 
       - name: Build and push client
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@master
         with:
           context: client
           build-args: |
@@ -85,35 +93,35 @@ jobs:
 
   deploy:
     needs: [build-api, 'build-client']
-    runs-on: github-runner.saeon.int
+    runs-on: saeon
     steps:
       - name: Check out source code (shared)
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           ref: ${{ env.BRANCH_REF }}
 
       - name: (SCP) Copy stack configuration to app server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.DEPLOYMENT_HOSTNAME }}
-          username: ${{ secrets.DEPLOYMENT_HOST_USERNAME }}
-          password: ${{ secrets.DEPLOYMENT_HOST_PASSWORD }}
-          port: ${{ secrets.DEPLOYMENT_HOST_SSH_PORT }}
+          host: ${{ env.SWARM_HOSTNAME }}
+          username: ${{ env.SWARM_USERNAME }}
+          password: ${{ env.SWARM_PASSWORD }}
+          port: ${{ env.SWARM_SSH_PORT }}
           source: 'deploy/next/docker-compose.yml'
           target: 'seacrifog'
 
       - name: (SSH) Deploy stack
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEPLOYMENT_HOSTNAME }}
-          username: ${{ secrets.DEPLOYMENT_HOST_USERNAME }}
-          password: ${{ secrets.DEPLOYMENT_HOST_PASSWORD }}
-          port: ${{ secrets.DEPLOYMENT_HOST_SSH_PORT }}
+          host: ${{ env.SWARM_HOSTNAME }}
+          username: ${{ env.SWARM_USERNAME }}
+          password: ${{ env.SWARM_PASSWORD }}
+          port: ${{ env.SWARM_SSH_PORT }}
           script: |
-            echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" > /home/runner/seacrifog/deploy/next/docker-compose.env
-            echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
-            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
-            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_HOST=${{ env.POSTGRES_HOST }}" > /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_PORT=${{ env.POSTGRES_PORT }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_USER=${{ env.POSTGRES_USER }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
+            echo "POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             echo "API_IMAGE=${{ needs.build-api.outputs.image }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             echo "CLIENT_IMAGE=${{ needs.build-client.outputs.image }}" >> /home/runner/seacrifog/deploy/next/docker-compose.env
             sudo /opt/deploy-docker-stack.sh /home/runner/seacrifog/deploy/next/docker-compose.yml /home/runner/seacrifog/deploy/next/docker-compose.env seacrifog
