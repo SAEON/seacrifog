@@ -11,8 +11,8 @@ env:
   SWARM_USERNAME: ${{ secrets.SWARM_USERNAME }} # Organization secret
   SWARM_PASSWORD: ${{ secrets.SWARM_PASSWORD }} # Organization secret
   SWARM_SSH_PORT: ${{ secrets.SWARM_SSH_PORT }} # Organization secret
-  POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }} # Repository secret
-  POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }} # Repository secret
+  POSTGRES_HOST: ${{ secrets.PG_HOST_STABLE }} # Organization secret
+  POSTGRES_PORT: ${{ secrets.PG_PORT_STABLE }} # Organization secret
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }} # Repository secret
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} # Repository secret
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
