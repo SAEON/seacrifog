@@ -57,6 +57,10 @@ services:
       restart_policy:
         condition: any
         delay: 30s
+      resources:
+        limits:
+          cpus: "1"
+          memory: 150M
     ports:
       - 7005:80
     networks:
