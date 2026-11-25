@@ -35,7 +35,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 150M
+          memory: 5G
     ports:
       - 7004:3000
     networks:
