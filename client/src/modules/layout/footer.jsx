@@ -103,7 +103,7 @@ export default () => (
                 <address style={{ fontStyle: 'normal' }}>
                   <a
                     className="white link"
-                    href="mailto:zach@saeon.ac.za"
+                    href="mailto:curation@saeon.nrf.ac.za"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
