@@ -85,8 +85,8 @@ jobs:
         with:
           context: client
           build-args: |
-            GQL_ENDPOINT=https://api.seacrifog.saeon.ac.za/graphql
-            DOWNLOADS_ENDPOINT=https://api.seacrifog.saeon.ac.za/downloads
+            GQL_ENDPOINT=https://api-seacrifog.saeon.ac.za/graphql
+            DOWNLOADS_ENDPOINT=https://api-seacrifog.saeon.ac.za/downloads
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
